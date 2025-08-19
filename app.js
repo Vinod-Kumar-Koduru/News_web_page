@@ -1,7 +1,3 @@
-
-const API_KEY = "eb2d322102fd433f8536d56804c8a789";
-const API_SEARCH = "https://newsapi.org/v2/everything";
-const API_TOP = "https://newsapi.org/v2/top-headlines";
 // Elements
 const searchInput = document.getElementById("searchInput");
 const searchBtn = document.getElementById("searchBtn");
@@ -9,6 +5,7 @@ const categorySelect = document.getElementById("categorySelect");
 const newsContainer = document.getElementById("newsContainer");
 const loader = document.getElementById("loader");
 const themeToggle = document.getElementById("themeToggle");
+
 
 function showLoader() {
   loader.classList.remove("hidden");
@@ -18,17 +15,11 @@ function hideLoader() {
   loader.classList.add("hidden");
 }
 
+
 async function fetchNews(query = "latest", category = "") {
-  newsContainer.innerHTML = showLoader();
-
+  showLoader();
   try {
-    let url;
-    if (category) {
-      url = `${API_TOP}?category=${category}&language=en&pageSize=10&apiKey=${API_KEY}`;
-    } else {
-      url = `${API_SEARCH}?q=${query}&language=en&pageSize=10&apiKey=${API_KEY}`;
-    }
-
+    const url = `/api/news?q=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`;
     const res = await fetch(url);
     const data = await res.json();
     hideLoader();
@@ -48,14 +39,15 @@ async function fetchNews(query = "latest", category = "") {
 function renderNews(articles) {
   newsContainer.innerHTML = "";
   articles.forEach((article) => {
+    const img = article.urlToImage || "https://via.placeholder.com/600x400?text=No+Image";
     const card = document.createElement("div");
     card.classList.add("card");
     card.innerHTML = `
       <div class="card-body">
-        <img src="${article.urlToImage}" alt="news" />
+        <img src="${img}" alt="news" />
         <div>
-          <h3>${article.title}</h3>
-          <p>${article.description ? article.description.slice(0, 120) + "..." : "No description available"}</p>
+          <h3>${article.title || "Untitled"}</h3>
+          <p>${article.description ? article.description.slice(0, 140) + "..." : "No description available"}</p>
         </div>
         <button class="read-more-btn">Read More</button>
       </div>
@@ -63,12 +55,13 @@ function renderNews(articles) {
 
     card.querySelector(".read-more-btn").addEventListener("click", () => {
       localStorage.setItem("selectedArticle", JSON.stringify(article));
-      window.location.href = "articaldetails.html";
+      window.location.href = "articaldetails.html"; // keep exactly this name or change in both places
     });
 
     newsContainer.appendChild(card);
   });
 }
+
 
 function applyTheme() {
   if (localStorage.getItem("theme") === "dark") {
@@ -80,16 +73,15 @@ function applyTheme() {
   }
 }
 
+
 searchBtn.addEventListener("click", () => {
   const query = searchInput.value.trim() || "latest";
-  const category = categorySelect.value;
-  fetchNews(query, category);
+  fetchNews(query, categorySelect.value);
 });
 
 categorySelect.addEventListener("change", () => {
   const query = searchInput.value.trim() || "latest";
-  const category = categorySelect.value;
-  fetchNews(query, category);
+  fetchNews(query, categorySelect.value);
 });
 
 themeToggle.addEventListener("click", () => {
