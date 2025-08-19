@@ -63,7 +63,7 @@ function renderNews(articles) {
 
     card.querySelector(".read-more-btn").addEventListener("click", () => {
       localStorage.setItem("selectedArticle", JSON.stringify(article));
-      window.location.href = "details.html";
+      window.location.href = "articaldetails.html";
     });
 
     newsContainer.appendChild(card);
