@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Details</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-response">
+            <h1>📰 Full Article</h1>
+            <button id="darkModeToggle">Dark Mode</button>
+        </div>
+    </header>
+
+    <main id="detailsContainer" class="details-container">
+    </main>
+
+
+    <script>
+        const darkModeToggle = document.getElementById("darkModeToggle");
+
+        if (localStorage.getItem("darkMode") === "enabled") {
+            document.body.classList.add("dark");
+            darkModeToggle.textContent = "☀️ Light Mode";
+        }
+
+        darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark");
+
+            if (document.body.classList.contains("dark")) {
+                localStorage.setItem("darkMode", "enabled");
+                darkModeToggle.textContent = "☀️ Light Mode";
+            } else {
+                localStorage.setItem("darkMode", "disabled");
+                darkModeToggle.textContent = "🌙 Dark Mode";
+            }
+        });
+
+        const article = JSON.parse(localStorage.getItem("selectedArticle"));
+        const container = document.getElementById("detailsContainer");
+
+        if (article) {
+            container.innerHTML = `
+        <div class="card">
+           <img src="${article.urlToImage || "https://via.placeholder.com/600"}" alt="news" />
+          <h2>${article.title}</h2>
+          <p><strong>Source:</strong> ${article.source.name || "Unknown"}</p>
+          <p>${article.description || "No description available"}</p>
+          <p>${article.content || ""}</p>
+          <a href="${article.url}" target="_blank" class="read-more-btn">Read Full Article</a>
+        </div>
+      `;
+        } else {
+            container.innerHTML = "<p>No article found.</p>";
+        }
+    </script>
+</body>
+
+</html>

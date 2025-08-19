@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Search Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-response">
+            <h1>📰 News Search Dashboard</h1>
+            <div class="controls">
+                <input type="text" id="searchInput" placeholder="Search news...">
+                <button id="searchBtn">Search</button>
+                <select id="categorySelect">
+                    <option value="">All</option>
+                    <option value="technology">Technology</option>
+                    <option value="sports">Sports</option>
+                    <option value="business">Business</option>
+                    <option value="health">Health</option>
+                    <option value="science">Science</option>
+                    <option value="entertainment">Entertainment</option>
+                </select>
+            </div>
+            <button id="themeToggle">Dark Mode</button>
+        </div>
+    </header>
+    <div id="loader" class="loader hidden"></div>
+
+    <main>
+        <section id="newsContainer" class="grid"></section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
